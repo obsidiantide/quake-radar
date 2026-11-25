@@ -120,20 +120,20 @@
 <!-- 3. Product -->
 <section class="s">
   <div class="kick">02 · Что получает пользователь</div>
-  <h2>Дашборд и Telegram-бот читают только проверенный итоговый слой</h2>
+  <h2>Сайт читает только проверенный итоговый слой</h2>
   <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:28px;flex:1;min-height:0">
     <div class="imgbox"><img src="../screens/dash_top.png"></div>
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="card">
-        <h3>Дашборд · Vercel</h3>
+        <h3>Обзор и карточки событий</h3>
         <p>Карта за 30 дней с радиусом 300 км вокруг Баку, лента событий с расстоянием до дома, график по дням, здоровье пайплайна.</p>
       </div>
       <div class="card">
-        <h3>Telegram-бот</h3>
-        <p>M3.5+ в 300 км от Баку или M5+ в регионе. Отдельно бот пишет о сбоях и восстановлении пайплайна.</p>
+        <h3>Тревоги</h3>
+        <p>M3.5+ в 300 км от Баку или M5+ в регионе: отдельная страница и баннер на всём сайте. Сбой пайплайна открывает issue в GitHub.</p>
       </div>
       <div class="card acc">
-        <p><b>Без дата-инженерного ядра продукта нет:</b> без сведения источников и проверок дашборд показывал бы дубли и мусор.</p>
+        <p><b>Без дата-инженерного ядра продукта нет:</b> без сведения источников и проверок сайт показывал бы дубли и мусор.</p>
       </div>
     </div>
   </div>
@@ -293,7 +293,7 @@ population <span class="v">2351300</span></pre>
         <li><code>runs.jsonl</code>: статус и время каждой задачи, строки и байты, проверки, ошибки</li>
         <li><code>health.json</code> пишется <b>даже после сбоя</b></li>
         <li>Источник устарел, если не было успешной загрузки <b>3 часа</b></li>
-        <li>Алерт оператору только при смене состояния: <span class="bad">сбой</span> → <span class="ok">восстановление</span></li>
+        <li>Алерт оператору — issue в GitHub: открывается при <span class="bad">сбое</span>, закрывается при <span class="ok">восстановлении</span></li>
       </ul>
     </div>
   </div>
@@ -361,7 +361,7 @@ population <span class="v">2351300</span></pre>
     <div>
       <div class="step"><div class="num">4</div><p><b>Повторный запуск без дублей</b>: число событий не меняется</p></div>
       <div class="step"><div class="num">5</div><p><b>Backfill</b>: <code>command = backfill</code>, start/end за прошлый месяц</p></div>
-      <div class="step"><div class="num">6</div><p><b>Падение источника</b>: <code>break_source = usgs</code> → <span class="warn">partial</span>, затем обычный запуск → <span class="ok">success</span> и алерт «recovered»</p></div>
+      <div class="step"><div class="num">6</div><p><b>Падение источника</b>: <code>break_source = usgs</code> → <span class="warn">partial</span>, открылся issue; обычный запуск → <span class="ok">success</span>, issue закрыт</p></div>
     </div>
   </div>
   <div class="foot"><span>Quake Radar</span><span>14</span></div>
@@ -372,7 +372,7 @@ population <span class="v">2351300</span></pre>
   <div class="kick">14 · Три самых трудных проблемы</div>
   <h2>Что было сложно и как решено</h2>
   <div class="grid3" style="flex:1">
-    <div class="card"><div class="num" style="margin-bottom:14px">1</div><h3>Одно событие — две записи</h3><p>Ключа для объединения нет. Решение — пространственно-временное окно и пара один-к-одному. Бот помнит алерты по id обоих агентств: когда USGS публикует позже, итоговый id меняется.</p></div>
+    <div class="card"><div class="num" style="margin-bottom:14px">1</div><h3>Одно событие — две записи</h3><p>Ключа для объединения нет. Решение — пространственно-временное окно и пара один-к-одному. id события берётся от EMSC и не меняется, когда USGS публикует позже.</p></div>
     <div class="card"><div class="num" style="margin-bottom:14px">2</div><h3>Ревизии задним числом</h3><p>Если грузить только «новое по времени события», уточнённые магнитуды теряются. Решение — <code>updatedafter</code> с перекрытием 6 ч и upsert последней ревизии.</p></div>
     <div class="card"><div class="num" style="margin-bottom:14px">3</div><h3>Не показать и не потерять</h3><p>Плохие данные не должны дойти до пользователя, но raw терять нельзя. Решение — кандидатная область, атомарная публикация и два раздельных указателя.</p></div>
   </div>
@@ -398,7 +398,7 @@ population <span class="v">2351300</span></pre>
       <ul>
         <li>Пара на границе месяцев не сводится</li>
         <li>Статичный порог объёма может задержать рой афтершоков</li>
-        <li><b>Дальше:</b> постоянный поток на VPS, S3 вместо git, адаптивные пороги, свой радиус для каждого пользователя бота, локальный каталог RCSS</li>
+        <li><b>Дальше:</b> постоянный поток на VPS, S3 вместо git, адаптивные пороги, персональный радиус тревог на сайте, локальный каталог RCSS</li>
       </ul>
     </div>
   </div>
