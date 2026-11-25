@@ -1,10 +1,10 @@
 {
   "alerted": [],
-  "last_status": "failed",
+  "last_status": "success",
   "processed_raw": [],
   "transform_pointer": {
-    "emsc": "raw/emsc/dt=2026-11-25/230358_20261125T230358-720382.json.gz",
-    "usgs": "raw/usgs/dt=2026-11-25/230358_20261125T230358-720382.json.gz"
+    "emsc": "raw/emsc/dt=2026-11-25/233105_20261125T233103-0e3ec5.json.gz",
+    "usgs": "raw/usgs/dt=2026-11-25/233103_20261125T233103-0e3ec5.json.gz"
   },
   "watermarks": {
     "emsc": "2026-11-25T20:48:34.704480+00:00",
