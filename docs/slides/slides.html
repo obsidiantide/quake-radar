@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Quake Radar — презентация</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  :root {
+    --ink: #0f172a; --body: #334155; --muted: #64748b; --line: #e2e8f0; --soft: #f8fafc;
+    --accent: #c2410c; --accent-soft: #fff7ed; --ok: #15803d; --bad: #b91c1c; --warn: #a16207;
+    --dark: #0b0f14;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: Inter, "Segoe UI", sans-serif; color: var(--body); }
+  .s { width: 1280px; height: 720px; position: relative; overflow: hidden; page-break-after: always;
+       padding: 56px 72px 48px; display: flex; flex-direction: column; background: #fff; }
+  .s:last-child { page-break-after: auto; }
+  .kick { font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: 40px; line-height: 1.12; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
+  h2 { font-size: 34px; line-height: 1.15; font-weight: 800; color: var(--ink); margin-bottom: 22px; letter-spacing: -.01em; }
+  h3 { font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  p, li { font-size: 19px; line-height: 1.5; }
+  .lead { font-size: 22px; line-height: 1.5; color: var(--body); }
+  ul { padding-left: 0; list-style: none; }
+  ul li { position: relative; padding-left: 22px; margin-bottom: 10px; }
+  ul li::before { content: ""; position: absolute; left: 2px; top: 12px; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+  b, strong { color: var(--ink); font-weight: 700; }
+  code, .mono { font-family: "JetBrains Mono", Consolas, monospace; font-size: .86em; color: #9a3412; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 22px; display: flex; justify-content: space-between;
+          font-size: 12px; color: #94a3b8; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1; min-height: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card { background: var(--soft); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }
+  .card p, .card li { font-size: 16.5px; }
+  .card.acc { background: var(--accent-soft); border-color: #fed7aa; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+         padding: 3px 9px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--muted); margin-bottom: 10px; }
+  .tag.api { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
+  .tag.stream { color: #7c3aed; border-color: #ddd6fe; background: #f5f3ff; }
+  .tag.file { color: #15803d; border-color: #bbf7d0; background: #f0fdf4; }
+  .img { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  .imgbox { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .imgbox img { max-width: 100%; max-height: 100%; border-radius: 12px; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+  th { text-align: left; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700;
+       padding: 10px 12px; border-bottom: 2px solid var(--line); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.4; }
+  td:first-child { font-weight: 600; color: var(--ink); }
+  pre { font-family: "JetBrains Mono", Consolas, monospace; font-size: 13px; line-height: 1.5; background: var(--dark); color: #e6edf3;
+        border-radius: 12px; padding: 16px 18px; white-space: pre-wrap; word-break: break-word; }
+  pre .k { color: #79c0ff; } pre .v { color: #ffa657; } pre .c { color: #8b949e; } pre .g { color: #3fb950; } pre .r { color: #f85149; }
+  .big { font-size: 54px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -.02em; }
+  .bigl { font-size: 15px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+  .ok { color: var(--ok); font-weight: 700; } .bad { color: var(--bad); font-weight: 700; } .warn { color: var(--warn); font-weight: 700; }
+  .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 14px; }
+  .s table { align-self: start; }
+  .num { flex: 0 0 34px; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 16px; }
+  .step p { font-size: 17.5px; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 6px; background: #f1f5f9; font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--ink); }
+  /* title slide */
+  .title { background: var(--dark); color: #e6edf3; justify-content: center; }
+  .title h1 { color: #fff; font-size: 76px; }
+  .title .sub { font-size: 26px; color: #c9d1d9; margin-top: 18px; max-width: 900px; line-height: 1.4; }
+  .title .meta { margin-top: 48px; display: flex; gap: 40px; font-size: 17px; color: #8b98a9; }
+  .title .meta b { color: #e6edf3; display: block; font-size: 18px; margin-top: 4px; font-weight: 600; }
+  .title .logo { width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, #ff7a45, #f85149);
+                 display: grid; place-items: center; font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 28px; }
+  .title .glow { position: absolute; right: -120px; top: -120px; width: 620px; height: 620px; border-radius: 50%;
+                 background: radial-gradient(circle, rgba(255,122,69,.28), rgba(255,122,69,0) 65%); }
+  .title .rings { position: absolute; right: 120px; top: 170px; }
+  .section { background: var(--accent-soft); }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="s title">
+  <div class="glow"></div>
+  <svg class="rings" width="360" height="360" viewBox="0 0 360 360" fill="none">
+    <circle cx="180" cy="180" r="40" stroke="#ff7a45" stroke-width="3"/>
+    <circle cx="180" cy="180" r="90" stroke="#ff7a45" stroke-opacity=".55" stroke-width="2"/>
+    <circle cx="180" cy="180" r="140" stroke="#ff7a45" stroke-opacity=".3" stroke-width="2" stroke-dasharray="6 8"/>
+    <circle cx="180" cy="180" r="10" fill="#fff"/>
+  </svg>
+  <div class="logo">Q</div>
+  <div class="kick" style="color:#ff9a6b">Data Engineering · семестровый проект</div>
+  <h1>Quake Radar</h1>
+  <div class="sub">Пайплайн данных о землетрясениях Кавказа и Каспия: два сейсмологических агентства, справочник городов, контроль качества, алерты и дашборд</div>
+  <div class="meta">
+    <div>Автор<b>[Имя Фамилия]</b></div>
+    <div>Дашборд<b>quake-radar-alpha.vercel.app</b></div>
+    <div>Код<b>github.com/obsidiantide/quake-radar</b></div>
+  </div>
+</section>
+
+<!-- 2. Problem & user -->
+<section class="s">
+  <div class="kick">01 · Проблема и пользователь</div>
+  <h2>«Это сейчас тряхнуло? Где? Насколько сильно?»</h2>
+  <div class="grid2">
+    <div>
+      <p class="lead" style="margin-bottom:22px"><b>Пользователь:</b> семья и друзья в Баку. После ощутимого толчка они ищут ответ в общем чате и в новостях.</p>
+      <ul>
+        <li>Новости пишут через <b>20–60 минут</b> и только о сильных событиях</li>
+        <li>EMSC и USGS дают <b>разные цифры</b> по одному и тому же толчку</li>
+        <li>Сайты агентств не говорят главного: <b>насколько далеко от дома</b></li>
+      </ul>
+    </div>
+    <div class="card acc" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="tag" style="background:#fff">Проблема в одном предложении</div>
+      <p style="font-size:22px;line-height:1.5;color:var(--ink);font-weight:600">Нужна одна проверенная запись о каждом землетрясении региона: с расстоянием до дома и ближайшим городом, без дублей из разных агентств, плюс уведомление о заметных толчках рядом с Баку.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>2</span></div>
+</section>
+
+<!-- 3. Product -->
+<section class="s">
+  <div class="kick">02 · Что получает пользователь</div>
+  <h2>Дашборд и Telegram-бот читают только проверенный итоговый слой</h2>
+  <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:28px;flex:1;min-height:0">
+    <div class="imgbox"><img src="../screens/dash_top.png"></div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <h3>Дашборд · Vercel</h3>
+        <p>Карта за 30 дней с радиусом 300 км вокруг Баку, лента событий с расстоянием до дома, график по дням, здоровье пайплайна.</p>
+      </div>
+      <div class="card">
+        <h3>Telegram-бот</h3>
+        <p>M3.5+ в 300 км от Баку или M5+ в регионе. Отдельно бот пишет о сбоях и восстановлении пайплайна.</p>
+      </div>
+      <div class="card acc">
+        <p><b>Без дата-инженерного ядра продукта нет:</b> без сведения источников и проверок дашборд показывал бы дубли и мусор.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>3</span></div>
+</section>
+
+<!-- 4. Sources -->
+<section class="s">
+  <div class="kick">03 · Источники</div>
+  <h2>Три типа источников: REST API, поток и файл</h2>
+  <div class="grid4" style="margin-bottom:22px">
+    <div class="card"><span class="tag api">REST API</span><h3>EMSC FDSN</h3><p>GeoJSON, <code>updatedafter</code><br>каждые 30 мин · 1–3 КБ<br>регион с M2</p></div>
+    <div class="card"><span class="tag stream">Поток</span><h3>EMSC WebSocket</h3><p>JSON create/update<br>real-time · микробатч 60 с<br>сервис в Docker</p></div>
+    <div class="card"><span class="tag api">REST API</span><h3>USGS FDSN</h3><p>GeoJSON, <code>updatedafter</code><br>каждые 30 мин · ~1 КБ<br>reviewed-решения, M4+</p></div>
+    <div class="card"><span class="tag file">Файл</span><h3>GeoNames</h3><p>cities15000.zip, TSV<br>раз в 30 дней · 3,3 МБ<br>863 города региона</p></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+<pre><span class="c">// USGS · raw/usgs/dt=2026-11-25/…json.gz</span>
+{<span class="k">"id"</span>: <span class="v">"us6000ucp5"</span>,
+ <span class="k">"mag"</span>: <span class="v">4.5</span>, <span class="k">"magType"</span>: <span class="v">"mb"</span>,
+ <span class="k">"time"</span>: <span class="v">1795296354969</span>,
+ <span class="k">"status"</span>: <span class="v">"reviewed"</span>,
+ <span class="k">"coordinates"</span>: [<span class="v">44.76, 38.77, 10</span>]}</pre>
+<pre><span class="c">// EMSC · raw/emsc/dt=2026-11-25/…json.gz</span>
+{<span class="k">"unid"</span>: <span class="v">"20261125_0000062"</span>,
+ <span class="k">"time"</span>: <span class="v">"2026-11-25T04:04:55Z"</span>,
+ <span class="k">"mag"</span>: <span class="v">2.4</span>, <span class="k">"magtype"</span>: <span class="v">"ml"</span>,
+ <span class="k">"lat"</span>: <span class="v">38.82</span>, <span class="k">"lon"</span>: <span class="v">43.62</span>,
+ <span class="k">"flynn_region"</span>: <span class="v">"EASTERN TURKEY"</span>}</pre>
+<pre><span class="c"># GeoNames · cities15000.txt (TSV)</span>
+<span class="v">587084</span>  Baku  <span class="c">…</span>
+lat <span class="v">40.37767</span>  lon <span class="v">49.89201</span>
+country <span class="v">AZ</span>
+population <span class="v">2351300</span></pre>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>4</span></div>
+</section>
+
+<!-- 5. Architecture -->
+<section class="s">
+  <div class="kick">04 · Архитектура</div>
+  <h2>От сырого ответа до дашборда за один запуск</h2>
+  <div class="imgbox"><img src="../screens/arch.png" style="border:none"></div>
+  <div class="foot"><span>Quake Radar</span><span>5</span></div>
+</section>
+
+<!-- 6. Storage & schemas -->
+<section class="s">
+  <div class="kick">05 · Слои хранения и схемы</div>
+  <h2>Сырое отдельно, итоговое отдельно</h2>
+  <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:28px;flex:1">
+    <table>
+      <tr><th>Слой</th><th>Формат и путь</th><th>Правило</th></tr>
+      <tr><td>raw</td><td><code>raw/&lt;src&gt;/dt=…/HHMMSS_run.json.gz</code><br>+ <code>.meta.json</code> (sha256, параметры)</td><td>как есть, никогда не меняется</td></tr>
+      <tr><td>stage</td><td><code>stage/&lt;src&gt;/month=YYYY-MM.parquet</code></td><td>типы, одна строка на событие источника</td></tr>
+      <tr><td>final</td><td><code>final/events/month=YYYY-MM.parquet</code></td><td>одно землетрясение — одна строка</td></tr>
+      <tr><td>serve</td><td><code>serve/*.json</code></td><td>для дашборда</td></tr>
+      <tr><td>meta</td><td><code>state.json · runs.jsonl · quarantine.jsonl</code></td><td>указатели и журнал</td></tr>
+    </table>
+    <div class="card" style="padding:18px 20px">
+      <h3>final.events — 20 колонок</h3>
+      <p class="mono" style="font-size:14.5px;line-height:1.75;color:var(--ink)">
+        <b>event_id</b> PK · event_time · lat · lon · depth_km<br>
+        mag · mag_type · place · event_type<br>
+        <b>sources</b> (emsc · usgs · emsc+usgs)<br>
+        preferred_source · emsc_id · usgs_id<br>
+        <b>mag_emsc · mag_usgs</b> · updated_at<br>
+        <b>nearest_city · country_code</b><br>
+        <b>nearest_city_km · dist_home_km</b></p>
+      <p style="font-size:15px;margin-top:10px;color:var(--muted)">Хранилище — ветка git <code>data</code>: файлы с понятной структурой, история коммитов = версии данных.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>6</span></div>
+</section>
+
+<!-- 7. Incremental -->
+<section class="s">
+  <div class="kick">06 · Инкрементальная загрузка</div>
+  <h2>Два указателя: данные не теряются и не дублируются</h2>
+  <div class="grid2">
+    <div>
+      <div class="step"><div class="num">1</div><p><b>Watermark источника</b> — максимальное <code>updated</code> из ответа. Следующий запрос: <code>updatedafter = watermark − 6 ч</code>. Перекрытие нужно, потому что агентства уточняют магнитуду задним числом.</p></div>
+      <div class="step"><div class="num">2</div><p><b>Указатель трансформации</b> — последний обработанный raw-файл. Двигается <b>только после успешной публикации</b>.</p></div>
+      <div class="step"><div class="num">3</div><p><b>Upsert в stage</b>: из повторов остаётся последняя ревизия; final пересчитывается только для затронутых месяцев.</p></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+<pre><span class="c">-- stage: последняя ревизия события</span>
+<span class="k">SELECT</span> * <span class="k">FROM</span> part
+<span class="k">QUALIFY</span> row_number() <span class="k">OVER</span> (
+  <span class="k">PARTITION BY</span> source_event_id
+  <span class="k">ORDER BY</span> updated_at <span class="k">DESC</span>, loaded_at <span class="k">DESC</span>
+) = <span class="v">1</span></pre>
+      <div class="card acc"><p><b>Проверено:</b> повторный запуск и повторный backfill за 87 дней дали те же <b>266 событий</b>, дублей 0. Сценарий покрыт тестом.</p></div>
+      <div class="card"><p><b>Backfill:</b> та же DAG с явным окном по 30 дней<br><span class="pill">quake backfill --start 2026-08-01 --end 2026-10-26</span></p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>7</span></div>
+</section>
+
+<!-- 8. Matching -->
+<section class="s">
+  <div class="kick">07 · Главное преобразование</div>
+  <h2>Одно землетрясение, два агентства, одна запись</h2>
+  <div class="grid2">
+    <div>
+      <ul>
+        <li>Пара EMSC↔USGS — одно событие, если <b>Δt ≤ 60 с</b> и <b>расстояние ≤ 100 км</b> (гаверсинус в SQL)</li>
+        <li>Лучшая пара <b>один-к-одному</b>: две оконные функции, вес <code>Δt + км/10</code></li>
+        <li>Решение USGS со статусом <b>reviewed</b> побеждает, иначе берётся EMSC; <b>обе магнитуды сохраняются</b></li>
+        <li>Обогащение из файла: ближайший город, страна, расстояние до дома</li>
+      </ul>
+    </div>
+    <div>
+      <table>
+        <tr><th>Событие</th><th>EMSC</th><th>USGS</th><th>Итог</th></tr>
+        <tr><td>Дивичи, 14.08</td><td>M4.9</td><td>M4.9</td><td>M4.9 · 122 км</td></tr>
+        <tr><td>Мамрух, 01.10</td><td>M4.2</td><td>M4.5</td><td>M4.5 · 292 км</td></tr>
+        <tr><td>Гагатли, 16.09</td><td>M3.8</td><td>M4.1</td><td>M4.1 · 393 км</td></tr>
+        <tr><td>Шамахы, 01.09</td><td>M3.9</td><td>M4.0</td><td>M4.0 · 113 км</td></tr>
+      </table>
+      <div class="card acc" style="margin-top:16px"><p>Сведены <b>7 из 7</b> событий USGS, средняя разница магнитуд <b>0,13</b>.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>8</span></div>
+</section>
+
+<!-- 9. Quality -->
+<section class="s">
+  <div class="kick">08 · Проверки качества</div>
+  <h2>Шесть проверок на каждой загрузке; провал блокирует публикацию</h2>
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:26px;flex:1;min-height:0">
+    <table style="font-size:15.5px">
+      <tr><th>Проверка</th><th>Правило</th></tr>
+      <tr><td>not_null_keys</td><td>id, время, координаты, магнитуда</td></tr>
+      <tr><td>value_ranges</td><td>в регионе, M от −1 до 10, глубина до 800 км</td></tr>
+      <tr><td>unique_event_id</td><td>одна строка на событие</td></tr>
+      <tr><td>no_future_events</td><td>не позже now + 10 мин</td></tr>
+      <tr><td>daily_volume</td><td>≤ max(200, 10 × медиана) в день</td></tr>
+      <tr><td>enrichment_complete</td><td>у каждого события есть город</td></tr>
+    </table>
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="imgbox"><img src="../screens/t_inject.png" style="border:none"></div>
+      <p style="font-size:15.5px">Трансформация пишет в <code>_candidate/</code>. Демо <code>--inject-bad</code>: запись <b>mag=42, lat=999</b> поймана, задачи publish, export и alert <span class="warn">skipped</span>, пользователь ничего не увидел. Битые записи без id уходят в карантин.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>9</span></div>
+</section>
+
+<!-- 10. Observability -->
+<section class="s">
+  <div class="kick">09 · Наблюдаемость</div>
+  <h2>Когда последний запуск, сколько данных, когда сломалось</h2>
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:26px;flex:1;min-height:0">
+    <div class="imgbox"><img src="../screens/dash_bottom.png"></div>
+    <div>
+      <ul>
+        <li><code>runs.jsonl</code>: статус и время каждой задачи, строки и байты, проверки, ошибки</li>
+        <li><code>health.json</code> пишется <b>даже после сбоя</b></li>
+        <li>Источник устарел, если не было успешной загрузки <b>3 часа</b></li>
+        <li>Алерт оператору только при смене состояния: <span class="bad">сбой</span> → <span class="ok">восстановление</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>10</span></div>
+</section>
+
+<!-- 11. Reliability -->
+<section class="s">
+  <div class="kick">10 · Надёжность</div>
+  <h2>Что происходит, когда что-то ломается</h2>
+  <div class="grid3" style="flex:1">
+    <div class="card"><span class="tag">Падение источника</span><h3>USGS недоступен</h3><p>Извлечение — optional-задача. Запуск получает статус <span class="warn">partial</span>, данные EMSC публикуются, watermark USGS стоит. Следующий запуск сам догружает пропущенное окно.</p></div>
+    <div class="card"><span class="tag">Плохие данные</span><h3>Проверка провалена</h3><p>Кандидат удаляется, указатель трансформации не двигается, raw остаётся. После исправления следующий запуск обработает те же файлы.</p></div>
+    <div class="card"><span class="tag">Смена схемы</span><h3>Источник изменил формат</h3><p>Пропавшие поля ловит <code>not_null_keys</code>, битые записи уходят в карантин. После правки парсера <code>quake rebuild</code> пересобирает stage и final из raw.</p></div>
+  </div>
+  <div class="card acc" style="margin-top:18px"><p>Ещё: повторы HTTP с экспоненциальной паузой · атомарная запись состояния (<code>os.replace</code>) · <code>concurrency</code> в workflow не даёт двум запускам писать одновременно.</p></div>
+  <div class="foot"><span>Quake Radar</span><span>11</span></div>
+</section>
+
+<!-- 12. Tools -->
+<section class="s">
+  <div class="kick">11 · Инструменты</div>
+  <h2>Почему именно эти инструменты</h2>
+  <table>
+    <tr><th style="width:22%">Выбрано</th><th style="width:43%">Почему</th><th>А не…</th></tr>
+    <tr><td>DuckDB + Parquet</td><td>SQL-сведение и оконные функции внутри одного процесса</td><td>PostgreSQL: постоянный сервер ради 2-минутного запуска</td></tr>
+    <tr><td>Свой DAG (83 строки)</td><td>явные зависимости, optional-задачи; каждую строку можно объяснить</td><td>Airflow/Prefect: тяжёлый сервер ради 9 задач</td></tr>
+    <tr><td>GitHub Actions cron</td><td>бесплатно, логи, ручной запуск с параметрами для демо</td><td>Vercel Cron: на Hobby-плане раз в сутки</td></tr>
+    <tr><td>Ветка git <code>data</code></td><td>файлы с понятной структурой, версии данных, бесплатно</td><td>облачная БД: отдельный аккаунт и секреты</td></tr>
+    <tr><td>Vercel, статика</td><td>дашборд без бэкенда, данные по HTTPS из <code>data</code></td><td>Flask-сервер: лишняя движущаяся часть</td></tr>
+  </table>
+  <div class="foot"><span>Quake Radar</span><span>12</span></div>
+</section>
+
+<!-- 13. Numbers -->
+<section class="s">
+  <div class="kick">12 · Измерения</div>
+  <h2>Цифры из журнала запусков</h2>
+  <div class="grid4" style="margin-bottom:26px">
+    <div class="card"><div class="big">266</div><div class="bigl">землетрясений в итоговом слое, 01.08–25.11</div></div>
+    <div class="card"><div class="big">23</div><div class="bigl">в радиусе 300 км от Баку, макс. M4.9</div></div>
+    <div class="card"><div class="big">1,5 с</div><div class="bigl">обычный инкрементальный запуск, 1,7 КБ</div></div>
+    <div class="card"><div class="big">0</div><div class="bigl">дублей после повторных запусков и backfill</div></div>
+  </div>
+  <table>
+    <tr><th>Показатель</th><th>Значение</th></tr>
+    <tr><td>Первая загрузка / backfill</td><td>83 строки за 3,1 с / 190 строк за 87 дней за 3,0–3,9 с</td></tr>
+    <tr><td>Объём слоёв</td><td>raw 3,4 МБ (GeoNames 3,3 МБ) · stage 80 КБ · final 48 КБ</td></tr>
+    <tr><td>Активность</td><td>2,5 события в день в среднем, максимум 7</td></tr>
+    <tr><td>Запуски</td><td>success / partial (эмуляция падения USGS) / failed (намеренно проваленная проверка) — счётчики на дашборде</td></tr>
+  </table>
+  <div class="foot"><span>Quake Radar</span><span>13</span></div>
+</section>
+
+<!-- 14. Demo -->
+<section class="s section">
+  <div class="kick">13 · Живая демонстрация</div>
+  <h2>Сценарий демо, около 5 минут</h2>
+  <div class="grid2">
+    <div>
+      <div class="step"><div class="num">1</div><p><b>Запуск по расписанию вручную</b><br>Actions → pipeline → Run workflow, 20 с до зелёного</p></div>
+      <div class="step"><div class="num">2</div><p><b>Raw → final</b>: новый коммит в ветке <code>data</code>, дашборд «обновлено только что»</p></div>
+      <div class="step"><div class="num">3</div><p><b>Проваленная проверка</b>: <code>inject_bad = true</code> → <span class="bad">failed</span>, дашборд не изменился</p></div>
+    </div>
+    <div>
+      <div class="step"><div class="num">4</div><p><b>Повторный запуск без дублей</b>: число событий не меняется</p></div>
+      <div class="step"><div class="num">5</div><p><b>Backfill</b>: <code>command = backfill</code>, start/end за прошлый месяц</p></div>
+      <div class="step"><div class="num">6</div><p><b>Падение источника</b>: <code>break_source = usgs</code> → <span class="warn">partial</span>, затем обычный запуск → <span class="ok">success</span> и алерт «recovered»</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>14</span></div>
+</section>
+
+<!-- 15. Hard problems -->
+<section class="s">
+  <div class="kick">14 · Три самых трудных проблемы</div>
+  <h2>Что было сложно и как решено</h2>
+  <div class="grid3" style="flex:1">
+    <div class="card"><div class="num" style="margin-bottom:14px">1</div><h3>Одно событие — две записи</h3><p>Ключа для объединения нет. Решение — пространственно-временное окно и пара один-к-одному. Бот помнит алерты по id обоих агентств: когда USGS публикует позже, итоговый id меняется.</p></div>
+    <div class="card"><div class="num" style="margin-bottom:14px">2</div><h3>Ревизии задним числом</h3><p>Если грузить только «новое по времени события», уточнённые магнитуды теряются. Решение — <code>updatedafter</code> с перекрытием 6 ч и upsert последней ревизии.</p></div>
+    <div class="card"><div class="num" style="margin-bottom:14px">3</div><h3>Не показать и не потерять</h3><p>Плохие данные не должны дойти до пользователя, но raw терять нельзя. Решение — кандидатная область, атомарная публикация и два раздельных указателя.</p></div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>15</span></div>
+</section>
+
+<!-- 16. Risks & limits -->
+<section class="s">
+  <div class="kick">15 · Риски, ограничения, планы</div>
+  <h2>Самые слабые места — честно</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-bottom:12px">Риски и запасной вариант</h3>
+      <table style="font-size:15.5px">
+        <tr><th>Риск</th><th>Запасной вариант</th></tr>
+        <tr><td>Агентство меняет API</td><td>второе агентство + карантин + <code>rebuild</code> из raw</td></tr>
+        <tr><td>Cron в Actions опаздывает</td><td>поток EMSC в Docker; VPS для 24/7</td></tr>
+        <tr><td>Ветка <code>data</code> растёт</td><td>сжатие истории или объектное хранилище</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="margin-bottom:12px">Ограничения и что дальше</h3>
+      <ul>
+        <li>Пара на границе месяцев не сводится</li>
+        <li>Статичный порог объёма может задержать рой афтершоков</li>
+        <li><b>Дальше:</b> постоянный поток на VPS, S3 вместо git, адаптивные пороги, свой радиус для каждого пользователя бота, локальный каталог RCSS</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>16</span></div>
+</section>
+
+<!-- 17. Repro -->
+<section class="s">
+  <div class="kick">16 · Воспроизводимость</div>
+  <h2>Одна команда для стека, одна для пайплайна</h2>
+  <div class="grid2">
+    <div style="display:flex;flex-direction:column;gap:14px">
+<pre><span class="c"># весь стек: планировщик, поток, дашборд :8765</span>
+<span class="g">$</span> docker compose up --build
+
+<span class="c"># один прогон от сырых данных</span>
+<span class="g">$</span> docker compose run --rm pipeline run
+
+<span class="c"># без Docker</span>
+<span class="g">$</span> pip install -r requirements.txt
+<span class="g">$</span> python -m quake run
+<span class="g">$</span> python -m quake status
+<span class="g">$</span> pytest</pre>
+      <p style="font-size:16px">README: команды, схема, источники со ссылками и датами, где использовался ИИ.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <img src="../screens/t_pytest.png" style="width:100%;border-radius:12px">
+      <p style="font-size:16px"><b>7 тестов</b> логики: сведение и несведение пар, идемпотентность и последняя ревизия, блокировка плохих данных, карантин, семантика DAG, циклы. Тесты запускаются в CI перед каждым прогоном.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Quake Radar</span><span>17</span></div>
+</section>
+
+<!-- 18. Thanks -->
+<section class="s title">
+  <div class="glow"></div>
+  <div class="kick" style="color:#ff9a6b">Спасибо</div>
+  <h1 style="font-size:64px">Вопросы?</h1>
+  <div class="sub">Компромиссы в дизайне, смена схемы источника, самое слабое место, любая цифра.</div>
+  <div class="meta">
+    <div>Дашборд<b>quake-radar-alpha.vercel.app</b></div>
+    <div>Код и данные<b>github.com/obsidiantide/quake-radar</b></div>
+  </div>
+</section>
+
+</body>
+</html>
