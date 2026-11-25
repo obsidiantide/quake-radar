@@ -79,3 +79,9 @@ td.mono, .mono { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
   .top { gap: 10px; padding: 10px 16px; } main { padding: 16px; } .pill { display: none; }
   .map { height: 340px; } .ev { grid-template-columns: 44px 1fr auto; padding: 10px 12px; }
 }
+@media (max-width: 640px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .kpi .value { font-size: 22px; }
+  nav { order: 3; width: 100%; flex: none; justify-content: space-between; }
+  nav a { padding: 6px 8px; font-size: 13.5px; }
+}
