@@ -3,8 +3,8 @@
   "last_status": "success",
   "processed_raw": [],
   "transform_pointer": {
-    "emsc": "raw/emsc/dt=2026-11-25/225716_20261125T225715-5f6d1f.json.gz",
-    "usgs": "raw/usgs/dt=2026-11-25/225715_20261125T225715-5f6d1f.json.gz"
+    "emsc": "raw/emsc/dt=2026-11-25/230358_20261125T230358-720382.json.gz",
+    "usgs": "raw/usgs/dt=2026-11-25/230358_20261125T230358-720382.json.gz"
   },
   "watermarks": {
     "emsc": "2026-11-25T20:48:34.704480+00:00",
