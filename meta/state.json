@@ -1,6 +1,6 @@
 {
   "alerted": [],
-  "last_status": "success",
+  "last_status": "failed",
   "processed_raw": [],
   "transform_pointer": {
     "emsc": "raw/emsc/dt=2026-11-25/230358_20261125T230358-720382.json.gz",
