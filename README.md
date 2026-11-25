@@ -8,7 +8,7 @@
 **Пользователь:** семья и друзья в Баку, которые хотят быстро понять, что это был
 за толчок: где, какой силы и насколько далеко от дома.
 
-- Дашборд: https://quake-radar-alpha.vercel.app
+- Дашборд: https://quake-radar-baku.vercel.app
 - Data lake: ветка [`data`](../../tree/data)
 - Запуски: вкладка **Actions** → `pipeline`
 
