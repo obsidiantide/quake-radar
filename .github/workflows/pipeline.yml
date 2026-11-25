@@ -21,6 +21,10 @@ on:
       break_source:
         description: "demo: simulate outage of usgs or emsc"
         default: ""
+      test_alert:
+        description: "send a test Telegram message (checks the bot secrets)"
+        type: boolean
+        default: false
 
 concurrency:                       # never two runs writing the lake at the same time
   group: pipeline
@@ -51,6 +55,13 @@ jobs:
 
       - name: Unit tests of transformation logic
         run: pytest -q tests
+
+      - name: Test Telegram alert
+        if: inputs.test_alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m quake test-alert
 
       - name: Run pipeline
         id: pipe

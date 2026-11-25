@@ -53,7 +53,8 @@ def quake_alerts(state: dict) -> int:
                 f"{t:%Y-%m-%d %H:%M} UTC, глубина {depth or 0:.0f} км\n"
                 f"{city_km:.0f} км от {city}, <b>{home_km:.0f} км от {config.HOME_NAME}</b>\n"
                 f"источники: {sources}")
-        send(text)
+        if not send(text):
+            continue  # not delivered (or telegram not configured): retry on the next run
         alerted |= keys
         sent += 1
     state["alerted"] = sorted(alerted)[-2000:]
