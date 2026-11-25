@@ -31,7 +31,7 @@ def export_events() -> int:
     cur = con.execute(f"""
         SELECT event_id, strftime(event_time, '%Y-%m-%dT%H:%M:%SZ') AS t, round(lat, 3) AS lat,
                round(lon, 3) AS lon, round(depth_km, 1) AS depth, round(mag, 1) AS mag, mag_type,
-               place, event_type AS type, sources, preferred_source AS pref, mag_emsc, mag_usgs,
+               place, event_type AS type, sources, preferred_source AS pref, mag_emsc, mag_usgs, emsc_id, usgs_id,
                nearest_city AS city, country_code AS cc, nearest_city_km AS city_km,
                dist_home_km AS home_km
         FROM read_parquet('{glob}')

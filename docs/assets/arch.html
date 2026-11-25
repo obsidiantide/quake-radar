@@ -79,7 +79,7 @@
   <text x="718" y="360" class="t">publish → export → alert</text>
   <text x="718" y="383" class="s">stage/&lt;src&gt;/month=YYYY-MM.parquet</text>
   <text x="718" y="403" class="s">final/events/month=YYYY-MM.parquet</text>
-  <text x="718" y="423" class="s">serve/{events,daily,health,runs}.json</text>
+  <text x="718" y="423" class="s">serve/{events,alerts,daily,health,runs}.json</text>
 
   <path class="l" d="M650 95 H700"/>
   <path class="l" d="M890 130 V150"/>
@@ -90,13 +90,13 @@
 
   <!-- outputs -->
   <rect class="box out" x="1130" y="60" width="240" height="96"/>
-  <text x="1148" y="92" class="t">Дашборд · Vercel</text>
+  <text x="1148" y="92" class="t">Сайт · Vercel</text>
   <text x="1148" y="116" class="s">карта, события, графики,</text>
   <text x="1148" y="136" class="s">здоровье пайплайна</text>
   <rect class="box out" x="1130" y="176" width="240" height="96"/>
-  <text x="1148" y="208" class="t">Telegram-бот</text>
-  <text x="1148" y="232" class="s">M3.5+ в 300 км от Баку,</text>
-  <text x="1148" y="252" class="s">M5+ в регионе; сбои</text>
+  <text x="1148" y="208" class="t">Тревоги и алерты</text>
+  <text x="1148" y="232" class="s">сайт: M3.5+ у Баку, M5+;</text>
+  <text x="1148" y="252" class="s">сбой → GitHub issue</text>
   <rect class="box out" x="1130" y="292" width="240" height="96"/>
   <text x="1148" y="324" class="t">Ветка git `data`</text>
   <text x="1148" y="348" class="s">хранилище всех слоёв,</text>
@@ -117,7 +117,7 @@
     <rect x="770" y="622" width="150" height="44" rx="8" fill="#fef2f2" stroke="#fca5a5"/><text x="784" y="649">quality_checks</text>
     <rect x="950" y="622" width="110" height="44" rx="8" fill="#f0fdf4" stroke="#86efac"/><text x="972" y="649">publish</text>
     <rect x="1100" y="596" width="150" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/><text x="1114" y="623">export_events</text>
-    <rect x="1100" y="650" width="150" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/><text x="1114" y="677">alert_quakes*</text>
+    <rect x="1100" y="650" width="150" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/><text x="1114" y="677">export_alerts</text>
   </g>
   <path class="l" d="M204 618 C410 618 410 636 620 640"/>
   <path class="l" d="M204 660 C250 628 560 628 620 642"/>

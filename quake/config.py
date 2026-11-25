@@ -46,8 +46,6 @@ ALERT_NEAR_MAG = 3.5
 ALERT_REGION_MAG = 5.0
 STALE_HOURS = 3  # a source with no successful load for this long is "stale"
 
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 USER_AGENT = "quake-radar/1.0 (student data-engineering project)"
 HTTP_TIMEOUT = 60

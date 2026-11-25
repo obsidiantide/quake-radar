@@ -42,21 +42,12 @@ def main(argv: list[str] | None = None) -> int:
     st.add_argument("--seconds", type=int, default=None)
     sub.add_parser("status")
     sub.add_parser("rebuild")
-    sub.add_parser("test-alert", help="send a test message to check Telegram settings")
     sv = sub.add_parser("serve")
     sv.add_argument("--port", type=int, default=8080)
     args = ap.parse_args(argv)
 
     if args.cmd == "serve":
         return _serve(args.port)
-    if args.cmd == "test-alert":
-        from . import alerts
-        if not (config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_ID):
-            print("TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID are not set")
-            return 1
-        ok = alerts.send("✅ quake-radar: тестовое сообщение, бот настроен правильно")
-        print("sent" if ok else "telegram rejected the message (see warning above)")
-        return 0 if ok else 1
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-5s %(name)s: %(message)s")
 

@@ -2,7 +2,7 @@
 
 extract_usgs ─┐
 extract_emsc ─┼─> transform ─> quality_checks ─> publish ─┬─> export_events
-extract_geonames ─> stage_cities ─┘                        └─> alert_quakes
+extract_geonames ─> stage_cities ─┘                        └─> export_alerts
                          (export_health + run log: always, even after a failure)
 """
 from __future__ import annotations
@@ -94,8 +94,8 @@ def _export_events(ctx: dict):
     return {"events_exported": export.export_events()}
 
 
-def _alert_quakes(ctx: dict):
-    return {"sent": alerts.quake_alerts(ctx["state"])}
+def _export_alerts(ctx: dict):
+    return {"alerts": alerts.export_quake_alerts()}
 
 
 def build_tasks() -> list[Task]:
@@ -108,7 +108,7 @@ def build_tasks() -> list[Task]:
         Task("quality_checks", _quality_checks, deps=["transform"]),
         Task("publish", _publish, deps=["quality_checks"]),
         Task("export_events", _export_events, deps=["publish"]),
-        Task("alert_quakes", _alert_quakes, deps=["publish"], optional=True),
+        Task("export_alerts", _export_alerts, deps=["publish"]),
     ]
 
 
@@ -162,11 +162,11 @@ def run(mode: str = "manual", start: datetime | None = None, end: datetime | Non
 
 
 def _operator_alert(state: dict, record: dict) -> None:
-    """Alert on state changes only: ok->broken and broken->recovered (no spam every 30 min)."""
+    """GitHub issue on state changes only: ok->broken opens it, broken->ok closes it."""
     prev = state.get("last_status", "success")
     cur = record["status"]
     if cur != "success" and prev == "success":
-        alerts.send(f"⚠️ <b>quake-radar: run {cur}</b>\n{record['run_id']}\n{(record['error'] or '')[:500]}")
+        alerts.operator_alert(record, recovered=False)
     elif cur == "success" and prev != "success":
-        alerts.send(f"✅ quake-radar recovered\n{record['run_id']}: {record['rows_raw']}")
+        alerts.operator_alert(record, recovered=True)
     state["last_status"] = cur

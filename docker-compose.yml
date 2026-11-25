@@ -4,7 +4,7 @@ services:
   scheduler:            # runs the DAG every 30 minutes (local twin of the GitHub Actions cron)
     build: .
     command: ["schedule", "--every", "30"]
-    env_file: [{ path: .env, required: false }]
+    
     volumes: ["./data:/data"]
     restart: unless-stopped
   stream:               # EMSC WebSocket -> raw layer, micro-batches every 60 s
@@ -20,5 +20,5 @@ services:
   pipeline:             # ad-hoc runs: run | backfill | status | rebuild
     build: .
     profiles: ["manual"]
-    env_file: [{ path: .env, required: false }]
+    
     volumes: ["./data:/data"]
