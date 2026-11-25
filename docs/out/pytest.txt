@@ -1,0 +1,8 @@
+tests/test_core.py::test_cross_source_match_and_unmatched PASSED         [ 14%]
+tests/test_core.py::test_far_apart_events_are_not_matched PASSED         [ 28%]
+tests/test_core.py::test_incremental_rerun_is_idempotent_and_takes_latest_revision PASSED [ 42%]
+tests/test_core.py::test_bad_data_is_blocked_and_product_unchanged PASSED [ 57%]
+tests/test_core.py::test_malformed_record_goes_to_quarantine PASSED      [ 71%]
+tests/test_core.py::test_dag_skips_downstream_of_failed_required_task_but_not_optional PASSED [ 85%]
+tests/test_core.py::test_dag_detects_cycles PASSED                       [100%]
+============================== 7 passed in 1.00s ==============================

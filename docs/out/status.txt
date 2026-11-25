@@ -1,0 +1,35 @@
+{
+  "last_success_at": "2026-11-25T08:30:13.419852+00:00",
+  "sources": {
+    "usgs": {
+      "last_success": "2026-11-25T08:30:13.419852+00:00",
+      "stale": false,
+      "watermark": "2026-11-23T00:37:51.040000+00:00"
+    },
+    "emsc": {
+      "last_success": "2026-11-25T08:30:13.419852+00:00",
+      "stale": false,
+      "watermark": "2026-11-25T05:02:32.338438+00:00"
+    },
+    "geonames": {
+      "last_success": "2026-11-25T08:30:13.419852+00:00",
+      "stale": false,
+      "watermark": "2026-11-25T08:17:43.872651+00:00"
+    }
+  },
+  "storage": {
+    "raw_files": 43,
+    "raw_bytes": 3410568,
+    "final_files": 4,
+    "final_bytes": 36268,
+    "events_total": 266
+  },
+  "last_14_days": {
+    "runs": 9,
+    "failed": 2,
+    "partial": 1,
+    "avg_duration_s": 1.9,
+    "rows_loaded": 474
+  }
+}
+last run: 20261125T083011-273b1d success 1.46s

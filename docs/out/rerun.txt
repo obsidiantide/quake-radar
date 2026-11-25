@@ -1,0 +1,18 @@
+
+run 20261125T083011-273b1d  status=SUCCESS  1.46s
+raw rows: {'usgs': 1, 'emsc': 1, 'geonames': 0}  bytes: 1743  final rows (touched months): 63
+  success  extract_usgs         0.72s  
+  success  extract_emsc         0.53s  
+  success  extract_geonames      0.0s  
+  success  stage_cities          0.0s  
+  success  transform            0.11s  
+  success  quality_checks       0.03s  
+  success  publish              0.02s  
+  success  export_events        0.03s  
+  success  alert_quakes         0.03s  
+  check PASS  not_null_keys          rows=0  event_id, event_time, lat, lon, mag must be present
+  check PASS  value_ranges           rows=0  lat/lon inside region, magnitude -1..10, depth -10..800 km
+  check PASS  unique_event_id        rows=0  event_id is unique in the final table
+  check PASS  no_future_events       rows=0  event_time is not later than now + 10 min
+  check PASS  daily_volume           rows=0  no day with more than 200 events (10x median, min 200)
+  check PASS  enrichment_complete    rows=0  every event has nearest city and distance to home

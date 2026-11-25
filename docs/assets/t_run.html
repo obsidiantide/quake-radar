@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;background:#fff;padding:18px}
+.w{background:#0d1117;border-radius:12px;overflow:hidden;border:1px solid #30363d;display:inline-block;min-width:1080px}
+.b{background:#161b22;padding:10px 14px;color:#8b949e;font:13px 'Segoe UI';display:flex;gap:8px;align-items:center}
+.d{width:12px;height:12px;border-radius:50%;display:inline-block}
+pre{margin:0;padding:16px 20px;color:#e6edf3;font:14px/1.55 Consolas,'JetBrains Mono',monospace;white-space:pre}
+.p{color:#79c0ff}</style></head><body><div class="w"><div class="b">
+<span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span>&nbsp;quake-radar — incremental run</div>
+<pre><span class="p">$ python -m quake run</span>
+run 20261125T083010-796451  status=<span style="color:#3fb950">SUCCESS</span>  1.28s
+raw rows: {&#x27;usgs&#x27;: 1, &#x27;emsc&#x27;: 1, &#x27;geonames&#x27;: 0}  bytes: 1743  final rows (touched months): 63
+  <span style="color:#3fb950">success</span>  extract_usgs         0.48s  
+  <span style="color:#3fb950">success</span>  extract_emsc         0.58s  
+  <span style="color:#3fb950">success</span>  extract_geonames      0.0s  
+  <span style="color:#3fb950">success</span>  stage_cities          0.0s  
+  <span style="color:#3fb950">success</span>  transform            0.11s  
+  <span style="color:#3fb950">success</span>  quality_checks       0.03s  
+  <span style="color:#3fb950">success</span>  publish              0.02s  
+  <span style="color:#3fb950">success</span>  export_events        0.03s  
+  <span style="color:#3fb950">success</span>  alert_quakes         0.03s  
+  check <span style="color:#3fb950">PASS</span>  not_null_keys          rows=0  event_id, event_time, lat, lon, mag must be present
+  check <span style="color:#3fb950">PASS</span>  value_ranges           rows=0  lat/lon inside region, magnitude -1..10, depth -10..800 km
+  check <span style="color:#3fb950">PASS</span>  unique_event_id        rows=0  event_id is unique in the final table
+  check <span style="color:#3fb950">PASS</span>  no_future_events       rows=0  event_time is not later than now + 10 min
+  check <span style="color:#3fb950">PASS</span>  daily_volume           rows=0  no day with more than 200 events (10x median, min 200)
+  check <span style="color:#3fb950">PASS</span>  enrichment_complete    rows=0  every event has nearest city and distance to home</pre></div></body></html>

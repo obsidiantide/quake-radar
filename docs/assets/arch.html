@@ -1,0 +1,132 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  body { margin: 0; background: #fff; font-family: "Segoe UI", Inter, sans-serif; }
+  svg text { font-family: "Segoe UI", Inter, sans-serif; }
+</style></head>
+<body>
+<svg width="1400" height="760" viewBox="0 0 1400 760" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+  </defs>
+  <style>
+    .box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 10; }
+    .src { fill: #eff6ff; stroke: #93c5fd; }
+    .lay { fill: #fff7ed; stroke: #fdba74; }
+    .task { fill: #f0fdf4; stroke: #86efac; }
+    .gate { fill: #fef2f2; stroke: #fca5a5; }
+    .out { fill: #f5f3ff; stroke: #c4b5fd; }
+    .t { font-size: 17px; font-weight: 600; fill: #0f172a; }
+    .s { font-size: 13.5px; fill: #475569; }
+    .h { font-size: 13px; font-weight: 700; letter-spacing: .08em; fill: #64748b; }
+    .l { stroke: #475569; stroke-width: 1.6; fill: none; marker-end: url(#a); }
+    .d { stroke: #dc2626; stroke-width: 1.6; fill: none; stroke-dasharray: 5 5; marker-end: url(#r); }
+  </style>
+
+  <text x="40" y="38" class="h">ИСТОЧНИКИ</text>
+  <text x="380" y="38" class="h">RAW · НЕИЗМЕНЯЕМЫЙ</text>
+  <text x="700" y="38" class="h">DAG · GITHUB ACTIONS CRON */30</text>
+  <text x="1130" y="38" class="h">ПОТРЕБИТЕЛИ</text>
+
+  <!-- sources -->
+  <rect class="box src" x="30" y="60" width="290" height="78"/>
+  <text x="48" y="92" class="t">EMSC WebSocket</text>
+  <text x="48" y="116" class="s">поток, real-time, GeoJSON</text>
+  <rect class="box src" x="30" y="158" width="290" height="78"/>
+  <text x="48" y="190" class="t">EMSC FDSN REST</text>
+  <text x="48" y="214" class="s">батч, updatedafter, GeoJSON</text>
+  <rect class="box src" x="30" y="256" width="290" height="78"/>
+  <text x="48" y="288" class="t">USGS FDSN REST</text>
+  <text x="48" y="312" class="s">батч, updatedafter, GeoJSON</text>
+  <rect class="box src" x="30" y="354" width="290" height="78"/>
+  <text x="48" y="386" class="t">GeoNames cities15000</text>
+  <text x="48" y="410" class="s">файл zip/TSV, раз в 30 дней</text>
+
+  <!-- raw -->
+  <rect class="box lay" x="370" y="60" width="280" height="372"/>
+  <text x="388" y="94" class="t">raw/</text>
+  <text x="388" y="122" class="s">&lt;source&gt;/dt=YYYY-MM-DD/</text>
+  <text x="388" y="142" class="s">HHMMSS_&lt;run&gt;.json.gz</text>
+  <text x="388" y="172" class="s">+ .meta.json: параметры</text>
+  <text x="388" y="192" class="s">запроса, байты, sha256</text>
+  <text x="388" y="232" class="s">ответ источника как есть;</text>
+  <text x="388" y="252" class="s">позволяет rebuild и backfill</text>
+  <text x="388" y="292" class="s">meta/state.json</text>
+  <text x="388" y="312" class="s">  watermark источника</text>
+  <text x="388" y="332" class="s">  указатель трансформации</text>
+  <text x="388" y="362" class="s">meta/runs.jsonl — журнал</text>
+  <text x="388" y="382" class="s">meta/quarantine.jsonl</text>
+
+  <path class="l" d="M320 99 H370"/>
+  <path class="l" d="M320 197 H370"/>
+  <path class="l" d="M320 295 H370"/>
+  <path class="l" d="M320 393 H370"/>
+
+  <!-- dag -->
+  <rect class="box task" x="700" y="60" width="380" height="70"/>
+  <text x="718" y="90" class="t">transform  (DuckDB)</text>
+  <text x="718" y="113" class="s">новые raw-файлы → stage, upsert, последняя ревизия</text>
+  <rect class="box task" x="700" y="150" width="380" height="70"/>
+  <text x="718" y="180" class="t">unify_events.sql</text>
+  <text x="718" y="203" class="s">сведение EMSC↔USGS (60 с, 100 км) + ближайший город</text>
+  <rect class="box gate" x="700" y="240" width="380" height="70"/>
+  <text x="718" y="270" class="t">quality_checks — 6 проверок</text>
+  <text x="718" y="293" class="s">кандидат в _candidate/; провал = публикации нет</text>
+  <rect class="box task" x="700" y="330" width="380" height="102"/>
+  <text x="718" y="360" class="t">publish → export → alert</text>
+  <text x="718" y="383" class="s">stage/&lt;src&gt;/month=YYYY-MM.parquet</text>
+  <text x="718" y="403" class="s">final/events/month=YYYY-MM.parquet</text>
+  <text x="718" y="423" class="s">serve/{events,daily,health,runs}.json</text>
+
+  <path class="l" d="M650 95 H700"/>
+  <path class="l" d="M890 130 V150"/>
+  <path class="l" d="M890 220 V240"/>
+  <path class="l" d="M890 310 V330"/>
+  <path class="d" d="M700 290 H676 V470 H510 V436"/>
+  <text x="530" y="494" class="s" fill="#dc2626">провал проверки: кандидат удаляется, указатель трансформации не двигается, raw остаётся → следующий запуск повторит</text>
+
+  <!-- outputs -->
+  <rect class="box out" x="1130" y="60" width="240" height="96"/>
+  <text x="1148" y="92" class="t">Дашборд · Vercel</text>
+  <text x="1148" y="116" class="s">карта, события, графики,</text>
+  <text x="1148" y="136" class="s">здоровье пайплайна</text>
+  <rect class="box out" x="1130" y="176" width="240" height="96"/>
+  <text x="1148" y="208" class="t">Telegram-бот</text>
+  <text x="1148" y="232" class="s">M3.5+ в 300 км от Баку,</text>
+  <text x="1148" y="252" class="s">M5+ в регионе; сбои</text>
+  <rect class="box out" x="1130" y="292" width="240" height="96"/>
+  <text x="1148" y="324" class="t">Ветка git `data`</text>
+  <text x="1148" y="348" class="s">хранилище всех слоёв,</text>
+  <text x="1148" y="368" class="s">история = версии данных</text>
+  <path class="l" d="M1080 380 C1105 380 1105 108 1130 108"/>
+  <path class="l" d="M1080 395 C1110 395 1110 224 1130 224"/>
+  <path class="l" d="M1080 410 C1105 410 1105 340 1130 340"/>
+
+  <!-- footer band -->
+  <rect x="30" y="540" width="1340" height="190" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="54" y="574" class="h">ОДИН ЗАПУСК (ЯВНЫЕ ЗАВИСИМОСТИ)</text>
+  <g font-size="14">
+    <rect x="54"  y="596" width="150" height="44" rx="8" fill="#eff6ff" stroke="#93c5fd"/><text x="70"  y="623">extract_usgs*</text>
+    <rect x="54"  y="650" width="150" height="44" rx="8" fill="#eff6ff" stroke="#93c5fd"/><text x="70"  y="677">extract_emsc*</text>
+    <rect x="240" y="650" width="170" height="44" rx="8" fill="#eff6ff" stroke="#93c5fd"/><text x="252" y="677">extract_geonames*</text>
+    <rect x="440" y="650" width="140" height="44" rx="8" fill="#f0fdf4" stroke="#86efac"/><text x="456" y="677">stage_cities</text>
+    <rect x="620" y="622" width="120" height="44" rx="8" fill="#f0fdf4" stroke="#86efac"/><text x="642" y="649">transform</text>
+    <rect x="770" y="622" width="150" height="44" rx="8" fill="#fef2f2" stroke="#fca5a5"/><text x="784" y="649">quality_checks</text>
+    <rect x="950" y="622" width="110" height="44" rx="8" fill="#f0fdf4" stroke="#86efac"/><text x="972" y="649">publish</text>
+    <rect x="1100" y="596" width="150" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/><text x="1114" y="623">export_events</text>
+    <rect x="1100" y="650" width="150" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/><text x="1114" y="677">alert_quakes*</text>
+  </g>
+  <path class="l" d="M204 618 C410 618 410 636 620 640"/>
+  <path class="l" d="M204 660 C250 628 560 628 620 642"/>
+  <path class="l" d="M410 672 H440"/>
+  <path class="l" d="M580 672 C600 672 600 650 620 650"/>
+  <path class="l" d="M740 644 H770"/>
+  <path class="l" d="M920 644 H950"/>
+  <path class="l" d="M1060 640 C1080 640 1080 618 1100 618"/>
+  <path class="l" d="M1060 648 C1080 648 1080 672 1100 672"/>
+  <text x="54" y="718" class="s">* optional: падение одного агентства даёт запуск «partial», данные второго всё равно публикуются. Журнал запусков и health.json пишутся всегда, даже после сбоя.</text>
+</svg>
+</body></html>
