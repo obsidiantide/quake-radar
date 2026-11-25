@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quake Radar · Кавказ и Каспий</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root {
+    --bg: #0b0f14; --panel: #121821; --panel-2: #18202b; --line: #243042;
+    --text: #e6edf3; --muted: #8b98a9; --accent: #ff7a45; --ok: #3fb950; --warn: #d29922; --bad: #f85149;
+    --m2: #58a6ff; --m3: #e3b341; --m4: #ff7a45; --m5: #f85149;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 Inter, system-ui, sans-serif; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+           padding: 18px 24px; border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), #f85149);
+          display: grid; place-items: center; font-weight: 700; }
+  h1 { font-size: 18px; margin: 0; } .sub { color: var(--muted); font-size: 12.5px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+          background: var(--panel-2); border: 1px solid var(--line); font-size: 12.5px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .dot.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+  main { padding: 20px 24px 40px; display: grid; gap: 16px; max-width: 1400px; margin: 0 auto; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .kpi .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .kpi .value { font-size: 26px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .kpi .hint { color: var(--muted); font-size: 12px; }
+  .grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .card h2 { font-size: 13px; font-weight: 600; margin: 0; padding: 12px 16px; border-bottom: 1px solid var(--line);
+             display: flex; justify-content: space-between; align-items: center; }
+  .card h2 span { color: var(--muted); font-weight: 400; }
+  #map { height: 460px; background: #0d1117; }
+  .list { max-height: 460px; overflow: auto; }
+  .ev { display: grid; grid-template-columns: 48px 1fr auto; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .ev:hover { background: var(--panel-2); }
+  .mag { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; color: #0b0f14; }
+  .ev .t { color: var(--muted); font-size: 12px; } .ev .km { text-align: right; font-variant-numeric: tabular-nums; }
+  .src { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); color: var(--muted); }
+  .src.both { color: var(--ok); border-color: #2a4d33; }
+  .chart-wrap { padding: 12px 16px; height: 230px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; } td.mono { font-family: "JetBrains Mono", monospace; font-size: 12px; }
+  .status { font-weight: 600; } .status.success { color: var(--ok); } .status.partial { color: var(--warn); } .status.failed { color: var(--bad); }
+  .sources { display: grid; gap: 8px; padding: 12px 16px; }
+  .source { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .legend { display: flex; gap: 12px; color: var(--muted); font-size: 12px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--panel); color: var(--text); }
+  .error { padding: 24px; color: var(--bad); }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding-bottom: 24px; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">Q</div>
+    <div>
+      <h1>Quake Radar</h1>
+      <div class="sub">Землетрясения Кавказа и Каспия · EMSC + USGS + GeoNames</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="pill"><span class="dot" id="run-dot"></span><span id="run-text">загрузка…</span></span>
+    <span class="pill" id="fresh-pill">—</span>
+  </div>
+</header>
+
+<main>
+  <section class="kpis">
+    <div class="kpi"><div class="label">За 24 часа</div><div class="value" id="k-24h">—</div><div class="hint" id="k-24h-h"></div></div>
+    <div class="kpi"><div class="label">За 7 дней</div><div class="value" id="k-7d">—</div><div class="hint" id="k-7d-h"></div></div>
+    <div class="kpi"><div class="label">Ближайшее к дому, 30 дн</div><div class="value" id="k-near">—</div><div class="hint" id="k-near-h"></div></div>
+    <div class="kpi"><div class="label">Сильнейшее, 30 дн</div><div class="value" id="k-max">—</div><div class="hint" id="k-max-h"></div></div>
+    <div class="kpi"><div class="label">Подтверждено 2 агентствами</div><div class="value" id="k-both">—</div><div class="hint">EMSC ↔ USGS сведены</div></div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Карта, 30 дней
+        <span class="legend"><span><i style="background:var(--m2)"></i>&lt;3</span><span><i style="background:var(--m3)"></i>3–4</span><span><i style="background:var(--m4)"></i>4–5</span><span><i style="background:var(--m5)"></i>5+</span></span>
+      </h2>
+      <div id="map"></div>
+    </div>
+    <div class="card">
+      <h2>Последние события <span id="ev-count"></span></h2>
+      <div class="list" id="events"></div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>События по дням <span>землетрясения M2+, 180 дней</span></h2>
+      <div class="chart-wrap"><canvas id="daily"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Источники <span>свежесть данных</span></h2>
+      <div class="sources" id="sources"></div>
+      <h2 style="border-top:1px solid var(--line)">Хранилище и 14 дней работы</h2>
+      <div class="sources" id="storage"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Запуски пайплайна <span id="runs-sub"></span></h2>
+    <div style="overflow:auto"><table id="runs"></table></div>
+  </section>
+</main>
+<footer>Данные: <a href="https://www.seismicportal.eu">EMSC</a>, <a href="https://earthquake.usgs.gov">USGS</a>, <a href="https://www.geonames.org">GeoNames</a> (CC BY 4.0). Все времена в UTC.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

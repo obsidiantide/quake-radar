@@ -1,0 +1,24 @@
+# One command for the whole stack:   docker compose up --build
+# One command for a pipeline run:    docker compose run --rm pipeline run
+services:
+  scheduler:            # runs the DAG every 30 minutes (local twin of the GitHub Actions cron)
+    build: .
+    command: ["schedule", "--every", "30"]
+    env_file: [{ path: .env, required: false }]
+    volumes: ["./data:/data"]
+    restart: unless-stopped
+  stream:               # EMSC WebSocket -> raw layer, micro-batches every 60 s
+    build: .
+    command: ["stream"]
+    volumes: ["./data:/data"]
+    restart: unless-stopped
+  dashboard:            # http://localhost:8765
+    build: .
+    command: ["serve", "--port", "8765"]
+    ports: ["8765:8765"]
+    volumes: ["./data:/data"]
+  pipeline:             # ad-hoc runs: run | backfill | status | rebuild
+    build: .
+    profiles: ["manual"]
+    env_file: [{ path: .env, required: false }]
+    volumes: ["./data:/data"]
