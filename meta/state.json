@@ -3,11 +3,11 @@
   "last_status": "success",
   "processed_raw": [],
   "transform_pointer": {
-    "emsc": "raw/emsc/dt=2026-11-26/015941_20261126T015939-d5fe5b.json.gz",
-    "usgs": "raw/usgs/dt=2026-11-26/015939_20261126T015939-d5fe5b.json.gz"
+    "emsc": "raw/emsc/dt=2026-11-26/102454_20261126T102452-2aa4e2.json.gz",
+    "usgs": "raw/usgs/dt=2026-11-26/102452_20261126T102452-2aa4e2.json.gz"
   },
   "watermarks": {
-    "emsc": "2026-11-26T00:46:50.954931+00:00",
+    "emsc": "2026-11-26T09:06:41.642471+00:00",
     "geonames": "2026-11-25T08:17:43.872651+00:00",
     "usgs": "2026-11-23T00:37:51.040000+00:00"
   }
