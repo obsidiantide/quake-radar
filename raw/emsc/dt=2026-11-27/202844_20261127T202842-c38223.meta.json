@@ -1,0 +1,19 @@
+{
+  "source": "emsc",
+  "run_id": "20261127T202842-c38223",
+  "fetched_at": "2026-11-27T20:28:44.747231+00:00",
+  "params": {
+    "format": "json",
+    "orderby": "time-asc",
+    "minlat": 36.0,
+    "maxlat": 46.0,
+    "minlon": 40.0,
+    "maxlon": 56.0,
+    "minmag": 2.0,
+    "limit": 20000,
+    "updatedafter": "2026-11-27T01:42:15",
+    "starttime": "2026-10-28T20:28:43"
+  },
+  "bytes": 1702,
+  "sha256": "38e6e65f6dd5df9adc6b03d8369128ac26ee735d49581a64c94f0f1d0040aa38"
+}
