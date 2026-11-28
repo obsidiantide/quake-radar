@@ -1,0 +1,19 @@
+{
+  "source": "usgs",
+  "run_id": "20261128T025309-408ab8",
+  "fetched_at": "2026-11-28T02:53:09.430318+00:00",
+  "params": {
+    "format": "geojson",
+    "orderby": "time-asc",
+    "minlatitude": 36.0,
+    "maxlatitude": 46.0,
+    "minlongitude": 40.0,
+    "maxlongitude": 56.0,
+    "minmagnitude": 2.0,
+    "limit": 20000,
+    "updatedafter": "2026-11-27T05:09:38",
+    "starttime": "2026-10-29T02:53:09"
+  },
+  "bytes": 1800,
+  "sha256": "ec17fa175e0659049783809e08ed9f7f44c114cfe3553ce90bee79ef2a8aea53"
+}
